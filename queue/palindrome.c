@@ -22,6 +22,7 @@ void stack_push_string(p_stack_t stack, char *string);
 void queue_push_string(p_queue_t queue, char *string);
 int compare(p_stack_t stack, p_queue_t queue);
 void print(void *data);
+bool stack_delete_base(p_stack_t stack);
 
 int main(int argc, char *argv[])
 {
@@ -90,16 +91,16 @@ void queue_push_string(p_queue_t queue, char *string)
 
 int compare(p_stack_t stack, p_queue_t queue)
 {
-	p_slnode_t head = stack->top;
-	while (head)
+	p_slnode_t base = stack->base;
+	while (stack->size)
 	{
+		p_slnode_t base = stack->base;
 		if (*(char *)queue_gethead(queue) 
-		!= *(char *)head->data)
+		!= *(char *)base->data)
 		{
 			return 0;
-		}
-		head = head->next;	
-		stack_pop(stack);
+		}	
+		stack_delete_base(stack);
 		queue_delete(queue);
 	}
 
@@ -109,4 +110,27 @@ int compare(p_stack_t stack, p_queue_t queue)
 void print(void *data)
 {
 	printf("%c ", *(char *)data);
+}
+
+bool stack_delete_base(p_stack_t stack)
+{
+	if (NULL == stack)
+	{
+		errno = EINVAL;
+		return false;
+	}
+
+	p_slnode_t second = stack->top;
+	while (second != stack->base)
+	{
+		second = second->next;
+	}
+	
+//	free(stack->base->data);
+	free(stack->base);
+	stack->base = second;
+	stack->base->next = NULL;
+	stack->size--;
+	
+	return true;
 }
