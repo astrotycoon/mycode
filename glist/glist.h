@@ -32,10 +32,23 @@ typedef struct glnode
 			struct glnode *phead;	/* pointer to the head of glist */
 			struct glnode *ptail;	/* pointer to the tail of glist */
 		}ptr;	
-	}
-}glnode_t, *p_glnode_t;
+	}data;
+}glist_t, *p_glist_t;
+/* init glist */
+p_glist_t glist_init(char *string);
+/* create glist */
+int glist_crete(p_glist_t glist, char *string);
+/* get the head of glist */
+p_glist_t glist_gethead(p_glist_t glist);
+/* get the tail of glist */
+p_glist_t glist_gettail(p_glist_t glist);
+/* get the length of glist */
+int glist_getlength(p_glist_t glist);
+/* get the depth of glist */
+int glist_getdepth(p_glist_t glist);
+/* copy glist_src to glist_dst */
+bool glist_copy(p_glist_t glist_dst, p_glist_t glist_src);
 
-p_glnode_t glist_init(char *string);
-p_glnode_t glist_gethead(p_glnode_t glist);
+
 
 #endif	/* __GLIST__ */
