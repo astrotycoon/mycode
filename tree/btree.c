@@ -65,7 +65,72 @@ extern void btree_destroy(p_btree_t tree)
 	if (tree->rchild != NULL)
 	{
 		btree_destroy(tree->rchild);
+	}	
+}
+
+static void btree_node_prev_traverse(p_btree_node_t this, Operate operate)
+{
+	if (NULL == this)
+	{
+		return;
 	}
 
-	
+	operate(this->data);
+	btree_node_prev_traverse(this->lchild, operate);
+	btree_node_prev_traverse(this->rchild, operate);
+
+	return;
 }
+
+extern void btree_prev_traverse(p_btree_t tree, Operate operate)
+{
+	if (NULL == tree)
+	{
+		return;
+	}
+
+	btree_node_prev_traverse(tree->root, operate);
+
+	return;
+}
+
+static void btree_node_in_traverse(p_btree_node_t this, Operate operate)
+{
+	if (NULL == this)
+	{
+		return;
+	}
+
+	btree_node_in_traverse(this->lchild, operate);
+	operage(this->data);
+	btree_node_in_tarverse(this->rchild, operate);
+
+	return;
+}
+
+extern void btree_in_tarverse(p_btree_t tree, Operate operate)
+{
+	if (NULL == tree)
+	{
+		return;
+	}
+
+	btree_node_in_traverse(tree->root, operate);
+
+	return;
+}
+
+static void btree_node_post_traverse(p_btree_node_t this, Operate operate)
+{
+	if (NULL == this)
+	{
+		return;
+	}
+
+	btree_node_post_traverse(this->lchild, operate);
+	btree_node_post_traverse(this->rchild, operate);
+	operate(this->data);
+
+	return;
+}
+
